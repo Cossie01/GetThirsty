@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lan="en"> <!-- Language English -->
+<!--Reference Code that was modified to suit my needs https://www.youtube.com/watch?v=ooc6f1w6Mzg  & https://www.youtube.com/watch?v=vGfY2rSIcfk-->
+<!-- Header -->
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<title>Login Form</title>
+</head>
+<body>
+    <div class="login">
+        <h3>Login</h3>
+        <form action="/loginPage" method="POST">
+        
+            <label class="emailbox"> 
+				<input type="email" id="email" name= "email" placeholder ="Email Address" required>
+				<span class="emailText"> </span> 
+			</label>
+			
+			<label class="passwordbox"> 
+				<input type="password" id="password" name="password" placeholder ="Password" required> 
+				<span class="passwordText"></span>
+			</label>
+			
+			<label class="submit-box">
+				<button type="submit">Submit</button> 
+		</form>
+
+    </div>
+    
+</body>
+			
+	<script> 
+	
+	
+		const email = document.getElementById("email");   
+		const password= document.getElementById("password");
+		
+		email.addEventListener('input', ()=> { 
+			const emailbox = document.querySelector('.emailbox'); 
+			const emailText = document.querySelector('.emailText');
+			const emailPattern = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$/;
+			
+			if (email.value.match(emailPattern)){
+				emailbox.classList.add('valid');
+				emailbox.classList.remove('invalid');
+				emailText.innerHTML= "Your email address works for us!";
+			}else{
+				emailbox.classList.add('invalid');
+				emailbox.classList.remove('valid');
+				emailText.innerHTML= "Not a Valid email address, try again";
+			}
+		});
+		
+		password.addEventListener('input',()=>{
+			const passwordbox = document.querySelector('.passwordbox');
+			const passwordText = document.querySelector('.passwordText');
+			const passPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+
+			if(password.value.match(passPattern)){
+				passwordbox.classList.add('valid');
+				passwordbox .classList.remove('invalid');
+				passwordText.innerHTML = "Nice!!!"; 
+			}else{
+				passwordbox.classList.add('invalid');
+				passwordbox.classList.remove('valid');
+				passwordText.innerHTML = "Your password must be at least 6 characters as well as contain at least one uppercase, one lowercase, and one number."; 
+			}
+
+		});
+		
+	</script>
+</html>
+

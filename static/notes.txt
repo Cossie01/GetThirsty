@@ -1,0 +1,13 @@
+First page is a the loginPage to add your email and password. 
+I have prompted the user to add the correct format for the email address and at at least 6 character password with one upper case and one special character.
+I also have combined a login server with my application flask to help authicate the user, but in this case I created a true statement for validate_credentials function. 
+In the true world I would connect to a database but this time I left it open.
+Second page is to vote on which teas is best from the list. It has a visual of each tea and is highlighted once the user hoovers over it. 
+It also visually counts the users vote.
+Once the vote has been submitted it takes you to a thank you page. This page I wanted to use the carasol effect from bootstrap.
+On the thank you page there is a see results page. 
+On the results page you can see the current votes in table and chart form.
+Within the results page you can view More Tea info which is connected to an external Api.
+Also you can click on the Play music button that will play the tea song. Hit again to turn it off.
+To make my API complicated, I incorporated user authication and authorsation while prompting the user. 
+I also implemented rate limiting to protect the API from unfair usage.

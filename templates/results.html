@@ -1,0 +1,141 @@
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+        <title>Results from Voting System</title>
+        <style>
+            .bottom-left {
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+            }
+            .bottom-right {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+            }
+            .green-button {
+                background-color: green;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <h1>Get Thirsty!</h1>
+            <h5>The Results are in.....</h5>
+        </div>
+        <div>
+            <table class="table" id="count-table">
+                <tr>
+                    <th>Tea Name</th>
+                    <th>Total Votes</th>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-5"> 
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="bottom-left">
+            <button onclick="goToExternalApiPage()" class="btn btn-success">More Tea Info</button>
+        </div>
+        <div class="bottom-right">
+            <button onclick="toggleMusic()" id="musicButton" class="btn btn-primary green-button">Play Music</button>
+        </div>
+        <audio id="music" src="{{ url_for('static', filename='teaSong.mp3') }}"></audio>
+
+        <script>
+            function getAll() {
+    $.ajax({
+        "url": "/vote-count",
+        "method": "GET",
+        "data": "",
+        "dataType": "JSON",
+        "success": function(result) {
+            console.log("AJAX success:", result);
+            var labels = [];
+            var data = [];
+            if (Array.isArray(result)) {
+                for (var i = 0; i < result.length; i++) {
+                    var tea = result[i];
+                    var teaname = Object.keys(tea)[0];
+                    var count = tea[teaname];
+                    console.log(teaname, count);
+                    addCountToTable(teaname, count);
+                    labels.push(teaname);
+                    data.push(count);
+                }
+                createChart(labels, data);
+            } else {
+                console.log("AJAX response is not an array:", result);
+            }
+        },
+        "error": function(xhr, status, error) {
+            console.log("status:" + status + " message:" + error);
+        }
+    });
+}
+
+
+            function addCountToTable(teaname, teacount){
+                console.log(teaname,teacount);
+                var tableElement = document.getElementById('count-table');
+                var rowElement = tableElement.insertRow(-1);
+                var cell1 = rowElement.insertCell(0);
+                cell1.innerHTML = teaname;
+                var cell2 = rowElement.insertCell(1);
+                cell2.innerHTML = teacount;
+            }
+
+            // Calling the function when the page is loaded
+            $(document).ready(function() {
+                getAll();
+            });
+            function createChart(labels, data) {
+                var ctx = document.getElementById('barChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '# of Votes',
+                            data: data,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+            function goToExternalApiPage() {
+                window.location.href = 'external-teas';
+            }
+            var isPlaying = false;
+            var music = document.getElementById('music');
+            var musicButton = document.getElementById('musicButton');
+
+            // toggle between playing and not playing
+            function toggleMusic() {
+                if (isPlaying) {
+                    music.pause();
+                    musicButton.innerHTML = 'Play Music';
+                } else {
+                    music.play();
+                    musicButton.innerHTML = 'Stop Music';
+                }
+                isPlaying = !isPlaying;
+            }
+
+        </script>
+    </body>
+</html>
